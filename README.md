@@ -218,6 +218,12 @@ ticketing-cli/
   README.md
   LICENSE
 ```
+## Data Dump 
+ticketing_cli/models.py is the core: a Ticket dataclass, Priority and Status enums, and a PriorityQueue backed by heapq. The comparator puts CRITICAL tickets first and breaks ties by age, so tkt next always gives you the most urgent thing that has been waiting the longest.
+ticketing_cli/cli.py wires ten subcommands through argparse: add, list, show, update, note, close, delete, export, next, and stats. The store path can be overridden per-command with --store or globally with the TICKETING_STORE env var.
+ticketing_cli/exporter.py handles both formats. JSON is a clean list of objects. CSV flattens multi-value fields and drops notes since that data does not map well to columns.
+ticketing_cli/display.py uses ANSI codes for colored priority and status badges in the terminal, with no external dependencies.
+tests/test_core.py covers models, the priority queue, storage roundtrips, and both export formats with pytest (install separately with pip install pytest).
 
 ---
 
